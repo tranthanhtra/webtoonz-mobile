@@ -41,6 +41,7 @@ dependencies:
   tuple: ^2.0.0
   ecdsa: ^0.0.4
   intl: ^0.17.0
+  get: ^4.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
