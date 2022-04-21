@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:webtoonz_mobile/screens/login_screen/login_screen.dart';
+import 'package:webtoonz_mobile/feature/login/view/login_screen.dart';
 
 void main() {
   runApp(MyApp());

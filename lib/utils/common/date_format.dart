@@ -1,14 +1,13 @@
 import 'dart:core';
-
 import 'package:intl/intl.dart';
-import 'package:webtoonz_mobile/models/GMT.dart';
+import 'package:webtoonz_mobile/utils/common/custom_date_time.dart';
 
 class TimeService {
   static DateTime? stringToDateTime(int dateTime) {
     if (dateTime == null) return null;
     DateTime temp = DateTime.fromMicrosecondsSinceEpoch(dateTime * 1000);
     DateTime time = temp
-        .add(Duration(hours: GMT.getGMT().hour, minutes: GMT.getGMT().minute));
+        .add(Duration(hours: CustomDateTime.getCustomDateTime().hour, minutes: CustomDateTime.getCustomDateTime().minute));
     return time;
   }
 
@@ -16,7 +15,7 @@ class TimeService {
     if (dateTime == null) return null;
     DateTime temp = DateTime.fromMillisecondsSinceEpoch(dateTime);
     DateTime time = temp
-        .add(Duration(hours: GMT.getGMT().hour, minutes: GMT.getGMT().minute));
+        .add(Duration(hours: CustomDateTime.getCustomDateTime().hour, minutes: CustomDateTime.getCustomDateTime().minute));
     return time;
   }
 
@@ -49,6 +48,10 @@ class TimeService {
     return DateFormat("yyyy'年'MM'月'dd'日'").format(dateTime);
   }
 
+  static String dateTimeToString5(DateTime dateTime) {
+    return DateFormat("yyyy-MM-dd").format(dateTime);
+  }
+
   static String timeNowToString() {
     return DateTime.now().toString();
   }
@@ -64,12 +67,16 @@ class TimeService {
   static int? timeToBackEndMaster(DateTime dateTime) {
     if (dateTime == null) return null;
     var datedFormat = dateTime.toUtc().millisecondsSinceEpoch;
-    print({"dateFormat": datedFormat});
     return datedFormat;
   }
 
   static String stringToDJP(DateTime dateTime) {
     var datedFormat = DateFormat("yyyy/MM/dd HH:mm").format(dateTime);
+    return datedFormat;
+  }
+
+  static String requestTimeFormat(DateTime dateTime) {
+    var datedFormat = DateFormat("HH:mm - dd MMM, yyyy").format(dateTime);
     return datedFormat;
   }
 
@@ -94,5 +101,14 @@ class TimeService {
         DateTime.fromMicrosecondsSinceEpoch(a ? time * 1000000 : time * 1000);
     var datedFormat = DateFormat("yyyy/MM/dd HH:mm$suffix").format(dateTime);
     return datedFormat;
+  }
+
+  static String millisecondToTime(int time) {
+    Duration duration = Duration(milliseconds: time);
+    if (duration.inHours > 1) {
+      return "${duration.inHours.toString()} h";
+    }
+
+    return "${duration.inMinutes.toString()} h";
   }
 }

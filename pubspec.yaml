@@ -42,6 +42,10 @@ dependencies:
   ecdsa: ^0.0.4
   intl: ^0.17.0
   get: ^4.6.1
+  flutter_svg: ^1.0.3
+  json_annotation: ^4.4.0
+  hive: ^2.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -52,6 +56,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  dio: ^4.0.4
+  flutter_dotenv: ^5.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
