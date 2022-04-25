@@ -66,24 +66,19 @@ class SignupController extends GetxController {
   Future signup() async {
     try {
       var keyPair = generateKeyPairAndEncrypt(password.text);
+      // print("publicKey:"+keyPair["publicKey"]+"\n");
+      // print("encryptedPrivateKey:"+keyPair["encryptedPrivateKey"]+"\n");
       CustomDio customDio = CustomDio();
-      var data = isCustomerMode.value
-          ? {
-              "mail": email.text,
-              "phone": phoneNumber.text,
+      var data = {
+              "fullName":"Nguyen Van A",
+              "email": "test1@gmail.com",
+              "username": "usertest1",
               "encryptedPrivateKey": keyPair["encryptedPrivateKey"],
               "publicKey": keyPair["publicKey"],
-            }
-          : {
-              "mail": email.text,
-              "phone": email.text,
-              "encryptedPrivateKey": keyPair["encryptedPrivateKey"],
-              "publicKey": keyPair["publicKey"],
-              "referral": referral.text
             };
 
       var response = await customDio.post(
-          "/${isCustomerMode.value ? "users" : "businesses"}", {"data": data},
+          "/user",  data,
           sign: false);
       var json = jsonDecode(response.toString());
       var result = json["data"];
@@ -92,7 +87,7 @@ class SignupController extends GetxController {
       }
       return result;
     } catch (e, s) {
-      print(e);
+      print("error:"+e.toString());
       return null;
     }
   }

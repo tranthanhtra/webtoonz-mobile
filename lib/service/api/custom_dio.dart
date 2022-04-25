@@ -92,6 +92,8 @@ class CustomDio {
 
   Future post(String url, dynamic params,
       {Options? options, bool? sign}) async {
+    print("url:"+url.toString()+"\n");
+    print("data:"+params.toString()+"\n");
     if (sign == false) return _dio.post(url, data: params, options: options);
     var finalData;
     var data = params["data"] ?? {};

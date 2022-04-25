@@ -125,7 +125,8 @@ class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
       child: CustomButton(
         text: "Sign Up",
         onClick: () async {
-          String validate = checkInfor(signupController);
+          // String validate = checkInfor(signupController);
+           String validate = "";
 
           if (validate != "") {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
