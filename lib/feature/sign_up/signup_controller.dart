@@ -6,6 +6,7 @@ import 'package:webtoonz_mobile/service/api/custom_dio.dart';
 import 'package:webtoonz_mobile/service/auth/certificate_service.dart';
 
 class SignupController extends GetxController {
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController zipCode = TextEditingController();
