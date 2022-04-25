@@ -6,10 +6,21 @@ import 'package:webtoonz_mobile/feature/sign_up/signup_controller.dart';
 import 'package:webtoonz_mobile/utils/common/config.dart';
 
 import '../../../component/custom_button.dart';
+import '../../../component/custom_formfield.dart';
 import '../../../component/custom_input_field.dart';
 
-class SignupHandymanScreen extends StatelessWidget {
+class SignupHandymanScreen extends StatefulWidget {
   const SignupHandymanScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignupHandymanScreen> createState() => _SignupHandymanScreenState();
+}
+
+class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
+  bool _showPassword = false;
+  Icon _iconPassword = Icon(Icons.visibility_off);
+  bool _showConfirmPW = false;
+  Icon _iconConfirmPW = Icon(Icons.visibility_off);
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +36,68 @@ class SignupHandymanScreen extends StatelessWidget {
           child: ListView(
             children: [
               _signUpTitle(),
-              _inputRegular("User name", "user", signupController.username),
-              _inputRegular(
-                  "Email address", "example@gmail.com", signupController.email),
-              _inputRegular(
-                  "Create password", "pass123456", signupController.password),
-              //_listValidate(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 17, 0),
-                child: Text('Password must have at least'),
+              CustomFormField(
+                maxLines: 1,
+                headingText: 'Username',
+                textInputType: TextInputType.text,
+                controller: signupController.username,
+                obsecureText: false,
+                hintText: 'Wind',
+                textInputAction: TextInputAction.done,
               ),
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 17, 0),
-                  child: Text('   8 characters',
-                      style: TextStyle(color: Colors.red))),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 17, 0),
-                child: Text('   1 uppercase letter',style: TextStyle(color: Colors.red)),
+              CustomFormField(
+                maxLines: 1,
+                headingText: 'Email address',
+                textInputType: TextInputType.text,
+                controller: signupController.email,
+                obsecureText: false,
+                hintText: 'example@gmail.com',
+                textInputAction: TextInputAction.done,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 17, 0),
-                child: Text('   1 lowercase letter',style: TextStyle(color: Colors.red)),
+              CustomFormField(
+                maxLines: 1,
+                textInputAction: TextInputAction.done,
+                textInputType: TextInputType.text,
+                controller: signupController.password,
+                headingText: "Password",
+                hintText: "Klaj9.0e",
+                obsecureText: !_showPassword,
+                suffixIcon: IconButton(
+                    icon: _iconPassword,
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                        if (_showPassword == true)
+                          _iconPassword = Icon(Icons.visibility);
+                        else {
+                          _iconPassword = Icon(Icons.visibility_off);
+                        }
+                      });
+                    }),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 17, 15),
-                child: Text('   1 number',style: TextStyle(color: Colors.red)),
-              ),
-              _inputRegular("Confirm password", "Your password",
-                  signupController.confirmPassword),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 17, 15),
-                child: Text('Confirm password does not match',style: TextStyle(color: Colors.red)),
+              CustomFormField(
+                maxLines: 1,
+                textInputAction: TextInputAction.done,
+                textInputType: TextInputType.text,
+                controller: signupController.confirmPassword,
+                headingText: "Confirm password",
+                hintText: "your password",
+                obsecureText: !_showConfirmPW,
+                suffixIcon: IconButton(
+                    icon: _iconConfirmPW,
+                    onPressed: () {
+                      setState(() {
+                        _showConfirmPW = !_showConfirmPW;
+                        if (_showConfirmPW == true)
+                          _iconConfirmPW = Icon(Icons.visibility);
+                        else {
+                          _iconConfirmPW = Icon(Icons.visibility_off);
+                        }
+                      });
+                    }),
               ),
               _checkAgree(signupController),
-              _signUpButton(),
+              _signUpButton(signupController, context),
             ],
           ),
         ),
@@ -79,35 +118,23 @@ class SignupHandymanScreen extends StatelessWidget {
   }
 
   // Padding _password(
-  //     String label, String hintText, TextEditingController controller) {
-  //   return Padding(
-  //     padding: const EdgeInsets.fromLTRB(17, 0, 17, 0),
-  //     child: TextField(
-  //       obscureText: true,
-  //       decoration: InputDecoration(
-  //         border: OutlineInputBorder(),
-  //         hintText: hintText,
-  //         suffixIcon: Icon(
-  //             Icons.visibility_off
-  //         ),
-  //       ),
-  //       controller: controller,
-  //     ),
-  //   );
-  // }
-
-  Padding _signUpButton() {
+  Padding _signUpButton(
+      SignupController signupController, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
       child: CustomButton(
         text: "Sign Up",
         onClick: () async {
-          // if (signupController.email.text != "" &&
-          //     signupController.phoneNumber.text != "" &&
-          //     signupController.password.text != "" &&
-          //     signupController.isAgree.value == true &&
-          //     signupController.confirmPassword.text != "") {
-          //   var result = await signupController.signup();
+          String validate = checkInfor(signupController);
+
+          if (validate != "") {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(validate),
+                duration: const Duration(milliseconds: 800)));
+            return;
+          }
+          var result = await signupController.signup();
+          print(result);
           Get.to(() => CheckEmailScreen());
         },
       ),
@@ -134,7 +161,7 @@ class SignupHandymanScreen extends StatelessWidget {
         direction: Axis.horizontal,
         children: [
           Obx(
-                () => Checkbox(
+            () => Checkbox(
                 value: signupController.isAgree.value,
                 onChanged: (bool? value) {
                   signupController.isAgree.value = value ?? false;
@@ -143,7 +170,7 @@ class SignupHandymanScreen extends StatelessWidget {
           Text(
             "I agree to the ",
             style:
-            TextStyle(fontSize: getHeight(14), fontWeight: FontWeight.w500),
+                TextStyle(fontSize: getHeight(14), fontWeight: FontWeight.w500),
           ),
           Text(
             "Term of Use",
@@ -156,7 +183,7 @@ class SignupHandymanScreen extends StatelessWidget {
           Text(
             " and ",
             style:
-            TextStyle(fontSize: getHeight(14), fontWeight: FontWeight.w500),
+                TextStyle(fontSize: getHeight(14), fontWeight: FontWeight.w500),
           ),
           Text(
             "Privacy Policy",
@@ -181,30 +208,6 @@ Container confirmButtonContainer(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Expanded(
-        //   child: OutlinedButton(
-        //     style: OutlinedButton.styleFrom(
-        //       backgroundColor: const Color(0xffff511a),
-        //       side: const BorderSide(
-        //         color: Color(0xffff511a),
-        //       ),
-        //     ),
-        //     onPressed: () async {
-        //       if (signupController.email.text != "" &&
-        //           signupController.phoneNumber.text != "" &&
-        //           signupController.password.text != "" &&
-        //           signupController.isAgree.value == true &&
-        //           signupController.confirmPassword.text != "") {
-        //         var result = await signupController.signup();
-        //         Get.to(() => CheckEmailScreen());
-        //       }
-        //     },
-        //     child: Text("continue".tr, style: const TextStyle(color: Colors.white)),
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: getHeight(12),
-        // ),
         Expanded(
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -227,4 +230,35 @@ Container confirmButtonContainer(
       ],
     ),
   );
+}
+
+String checkInfor(SignupController signupController) {
+  if (signupController.username.text == "") {
+    return 'Username must not be empty';
+  }
+  if (signupController.email.text == "") {
+    return 'Email must not be empty';
+  }
+  if (signupController.email.text.contains('@') == false) {
+    return 'Email must contain @';
+  }
+  if (signupController.password.text.length < 8) {
+    return 'Password must have at least 8 characters';
+  }
+  if (signupController.password.text.contains(new RegExp(r'[0-9]')) == false) {
+    return 'Password must have at least 1 digit';
+  }
+  if (signupController.password.text.contains(new RegExp(r'[a-z]')) == false) {
+    return 'Password must have at least 1 lowercase letter';
+  }
+  if (signupController.password.text.contains(new RegExp(r'[A-Z]')) == false) {
+    return 'Password must have at least 1 uppercase letter';
+  }
+  if (signupController.password.text != signupController.confirmPassword.text) {
+    return 'Confirm password does not match';
+  }
+  if (signupController.isAgree.value == false) {
+    return 'You have not clicked the agree box';
+  }
+  return "";
 }
