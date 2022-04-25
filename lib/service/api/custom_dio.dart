@@ -11,8 +11,8 @@ import 'package:webtoonz_mobile/utils/common/date_format.dart';
 
 class CustomDio {
   GlobalController globalController = Get.put(GlobalController());
-  static final String baseUrlFormat = dotenv.env["SERVER_URL"].toString();
-  static final String baseUrl = baseUrlFormat[baseUrlFormat.length - 1] == "/" ? baseUrlFormat : baseUrlFormat + "/";
+  //static final String baseUrlFormat = dotenv.env["SERVER_URL"].toString();
+  static final String baseUrl = "https://webtoonz.uetbc.xyz/api";
 
   static CustomDio _instance() => CustomDio._();
 

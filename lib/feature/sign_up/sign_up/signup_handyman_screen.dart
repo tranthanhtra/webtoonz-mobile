@@ -38,11 +38,20 @@ class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
               _signUpTitle(),
               CustomFormField(
                 maxLines: 1,
+                headingText: 'Full name',
+                textInputType: TextInputType.text,
+                controller: signupController.fullName,
+                obsecureText: false,
+                hintText: 'Nguyen Van A',
+                textInputAction: TextInputAction.done,
+              ),
+              CustomFormField(
+                maxLines: 1,
                 headingText: 'Username',
                 textInputType: TextInputType.text,
-                controller: signupController.username,
+                controller: signupController.userName,
                 obsecureText: false,
-                hintText: 'Wind',
+                hintText: 'ABC',
                 textInputAction: TextInputAction.done,
               ),
               CustomFormField(
@@ -81,7 +90,7 @@ class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
                 textInputType: TextInputType.text,
                 controller: signupController.confirmPassword,
                 headingText: "Confirm password",
-                hintText: "your password",
+                hintText: "Your password",
                 obsecureText: !_showConfirmPW,
                 suffixIcon: IconButton(
                     icon: _iconConfirmPW,
@@ -125,7 +134,7 @@ class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
       child: CustomButton(
         text: "Sign Up",
         onClick: () async {
-          String validate = checkInfor(signupController);
+           String validate = checkInfor(signupController);
 
           if (validate != "") {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -143,7 +152,7 @@ class _SignupHandymanScreenState extends State<SignupHandymanScreen> {
 
   Padding _signUpTitle() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 20, 18, 25),
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
       child: Center(
           child: Text("Sign Up",
               style: TextStyle(
@@ -233,7 +242,10 @@ Container confirmButtonContainer(
 }
 
 String checkInfor(SignupController signupController) {
-  if (signupController.username.text == "") {
+  if (signupController.fullName.text == "") {
+    return 'Full name must not be empty';
+  }
+  if (signupController.userName.text == "") {
     return 'Username must not be empty';
   }
   if (signupController.email.text == "") {
