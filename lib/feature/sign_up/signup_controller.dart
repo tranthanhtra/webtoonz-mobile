@@ -6,7 +6,8 @@ import 'package:webtoonz_mobile/service/api/custom_dio.dart';
 import 'package:webtoonz_mobile/service/auth/certificate_service.dart';
 
 class SignupController extends GetxController {
-  TextEditingController username = TextEditingController();
+  TextEditingController fullName = TextEditingController();
+  TextEditingController userName = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController zipCode = TextEditingController();
@@ -69,17 +70,16 @@ class SignupController extends GetxController {
       // print("publicKey:"+keyPair["publicKey"]+"\n");
       // print("encryptedPrivateKey:"+keyPair["encryptedPrivateKey"]+"\n");
       CustomDio customDio = CustomDio();
-      var data = {
-              "fullName":"Nguyen Van A",
-              "email": "test1@gmail.com",
-              "username": "usertest1",
-              "encryptedPrivateKey": keyPair["encryptedPrivateKey"],
-              "publicKey": keyPair["publicKey"],
-            };
 
-      var response = await customDio.post(
-          "/user",  data,
-          sign: false);
+      var data = {
+        "fullName": fullName.text,
+        "email": email.text,
+        "username": userName.text,
+        "encryptedPrivateKey": keyPair["encryptedPrivateKey"],
+        "publicKey": keyPair["publicKey"],
+      };
+
+      var response = await customDio.post("/user", data, sign: false);
       var json = jsonDecode(response.toString());
       var result = json["data"];
       if (json["success"] == true) {
@@ -87,7 +87,7 @@ class SignupController extends GetxController {
       }
       return result;
     } catch (e, s) {
-      print("error:"+e.toString());
+      print("error signUp:" + e.toString());
       return null;
     }
   }

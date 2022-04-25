@@ -34,12 +34,15 @@ class CustomFormField extends StatelessWidget {
           margin: const EdgeInsets.only(
             left: 20,
             right: 20,
-            bottom: 10,
-            top:20,
+            bottom: 5,
+            top:15,
           ),
-          child: Text(
-            headingText,
-            style: KTextStyle.textFieldHeading,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 0, 8.0, 0),
+            child: Text(
+              headingText,
+              style: KTextStyle.textFieldHeading,
+            ),
           ),
         ),
         Container(
